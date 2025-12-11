@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Match Volunteers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Match Volunteers to Events</h1>
+
+<label>Event ID:</label>
+<input type="number" id="eventId">
+<button onclick="matchVolunteers()">Match</button>
+
+<h2>Results</h2>
+<div id="result"></div>
+
+<script>
+function matchVolunteers() {
+    let id = document.getElementById("eventId").value;
+
+    fetch("http://localhost:8080/match?eventId=" + id)
+        .then(res => res.json())
+        .then(data => {
+            let out = document.getElementById("result");
+            out.innerHTML = "";
+
+            data.forEach(m => {
+                out.innerHTML += `
+                    <p><b>${m.volunteer}</b> — Score: ${m.score}</p>
+                `;
+            });
+        });
+}
+</script>
+
+</body>
+</html>

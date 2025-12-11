@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>Events</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Events</h1>
+<h2>Add Event</h2>
+
+<form id="eventForm">
+
+    <label>Event Name:</label><br>
+    <input type="text" id="eventName" required><br><br>
+
+    <label>Required Skills:</label><br>
+    <input type="text" id="requiredSkills" placeholder="ex: management, coding, music"><br><br>
+
+    <label>Volunteers Needed:</label><br>
+    <input type="number" id="volunteersNeeded" min="1" required><br><br>
+
+    <label>Date:</label><br>
+    <input type="date" id="eventDate" required><br><br>
+
+    <button type="submit">Add Event</button>
+</form>
+
+
+<h2>Event List</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Event Name</th>
+            <th>Required Skills</th>
+            <th>Volunteers Needed</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody id="eventTable"></tbody>
+</table>
+
+
+<script>
+
+const BASE = "http://localhost:8080";
+
+
+/* -------------------- LOAD EVENTS -------------------- */
+function loadEvents() {
+    fetch(BASE + "/events")
+        .then(res => res.json())
+        .then(data => {
+            let table = document.getElementById("eventTable");
+            table.innerHTML = "";
+
+            data.forEach(e => {
+                let row = `
+                <tr>
+                    <td>${e.id}</td>
+                    <td>${e.eventName}</td>
+                    <td>${e.requiredSkills}</td>
+                    <td>${e.volunteersNeeded}</td>
+                    <td>${e.eventDate}</td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+        });
+}
+loadEvents();
+
+
+/* -------------------- ADD EVENT (POST) -------------------- */
+document.getElementById("eventForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let nameValue = document.getElementById("eventName").value;
+    let skillValue = document.getElementById("requiredSkills").value;
+    let needValue = document.getElementById("volunteersNeeded").value;
+    let dateValue = document.getElementById("eventDate").value;
+
+    fetch(BASE + "/addEvent", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+            eventName: nameValue,
+            requiredSkills: skillValue,
+            volunteersNeeded: needValue,
+            eventDate: dateValue
+        })
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert("Event added successfully!");
+        document.getElementById("eventForm").reset();
+        loadEvents();
+    });
+});
+
+</script>
+
+</body>
+</html>

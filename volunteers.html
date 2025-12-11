@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Volunteer Management</title>
+
+    <style>
+        body { font-family: Arial, sans-serif; background-color: lab(85.02% -25.9 -9.87); margin: 20px; }
+        input, button { padding: 8px; margin: 6px 0; width: 300px; }
+        table { border-collapse: collapse; width: 100%; background-color: hwb(30 96% 3%); margin-top: 30px; }
+        th, td { border: 1px solid hwb(180 94% 4%); padding: 10px; text-align: left; }
+        th { background-color: hsl(28, 71%, 71%); }
+        form { margin-bottom: 30px; }
+        button { cursor: pointer; }
+    </style>
+</head>
+
+<body>
+
+<h1>Add Volunteer</h1>
+
+<form id="addForm">
+    <label>Name:</label><br>
+    <input type="text" id="name" required><br>
+
+    <label>Branch:</label><br>
+    <input type="text" id="branch" required><br>
+
+    <label>Year:</label><br>
+    <input type="number" id="year" min="1" max="5" required><br>
+
+    <label>Interests:</label><br>
+    <input type="text" id="interests"><br>
+
+    <label>Skills:</label><br>
+    <input type="text" id="skills"><br>
+
+    <label>Experience (years):</label><br>
+    <input type="number" id="experience" min="0"><br><br>
+
+    <button type="submit">Add Volunteer</button>
+</form>
+
+
+<h1>Volunteer List</h1>
+
+<table id="volTable">
+    <thead>
+        <tr>
+            <th>ID</th><th>Name</th><th>Branch</th><th>Year</th>
+            <th>Interests</th><th>Skills</th><th>Experience</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<script>
+
+const BASE = "http://localhost:8080";
+
+/* -------------------- GET DATA -------------------- */
+function loadVolunteers() {
+    fetch(BASE + "/volunteers")
+        .then(res => res.json())
+        .then(list => {
+            const body = document.querySelector("#volTable tbody");
+            body.innerHTML = "";
+
+            list.forEach(v => {
+                body.innerHTML += `
+                    <tr>
+                        <td>${v.id}</td>
+                        <td>${v.name}</td>
+                        <td>${v.branch}</td>
+                        <td>${v.year}</td>
+                        <td>${v.interests}</td>
+                        <td>${v.skills}</td>
+                        <td>${v.experience}</td>
+                    </tr>
+                `;
+            });
+        });
+}
+loadVolunteers();
+
+
+/* -------------------- ADD DATA (POST) -------------------- */
+document.getElementById("addForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const nameValue = document.getElementById("name").value;
+    const branchValue = document.getElementById("branch").value;
+    const yearValue = document.getElementById("year").value;
+    const interestValue = document.getElementById("interests").value;
+    const skillsValue = document.getElementById("skills").value;
+    const expValue = document.getElementById("experience").value;
+
+    fetch(BASE + "/addVolunteer", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+            name: nameValue,
+            branch: branchValue,
+            year: yearValue,
+            interests: interestValue,
+            skills: skillsValue,
+            experience: expValue
+        })
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert("Volunteer added successfully!");
+        loadVolunteers();
+        document.getElementById("addForm").reset();
+    });
+});
+
+</script>
+
+</body>
+</html>

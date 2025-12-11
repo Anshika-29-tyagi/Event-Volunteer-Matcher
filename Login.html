@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: hwb(36 45% 3% / 0.836);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: hsl(0, 0%, 98%);
+            padding: 40px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            background: hwb(266 0% 0%);
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        button:hover {
+            background: hsl(130, 100%, 35%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Enter Username" required>
+            <input type="password" id="password" placeholder="Enter Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- ⭐ LOGIN SCRIPT -->
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let user = document.getElementById("username").value;
+            let pass = document.getElementById("password").value;
+
+            // ✔ Set your correct username & password
+            let correctUser = "admin";
+            let correctPass = "12345";
+
+            if (user === correctUser && pass === correctPass) {
+                alert("Login Successful!");
+                window.location.href = "index.html";  // Redirect to homepage
+            } else {
+                alert("Invalid Username or Password!");
+            }
+        });
+    </script>
+
+</body>
+</html>
