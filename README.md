@@ -1,1 +1,2 @@
-# Event-Volunteer-Matcher
+Event Volunteer Matcher is a web-based application that helps colleges assign the right volunteers to the right events. The system allows adding and viewing volunteers and events, and uses a simple scoring algorithm to match volunteers based on skills, experience, and interests.
+Frontend is built using HTML, CSS, JavaScript, and the backend uses pure Java (HttpServer + JDBC) with a MySQL database.# Event-Volunteer-Matcher
